@@ -1,10 +1,10 @@
 // routes/auth.ts
+import "../config/passport";
 import express, { Request, Response } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../models/User";
-import "../config/passport";
 import logger from "../logger";
 
 class AuthController {
@@ -41,7 +41,7 @@ class AuthController {
   }
 
   // Signup (Email/Password)
-  public static async signup(req: Request, res: Response) {
+  public static async signup(req: Request, res: Response): Promise<any> {
     try {
       const { name, email, password } = req.body;
       const existingUser = await User.findOne({ email });
@@ -66,15 +66,18 @@ class AuthController {
         sameSite: "lax",
         secure: false,
       });
-      res.status(201).json({ user: newUser });
+
+      // Instead of returning the response inside the function, directly send the response
+      return res.status(201).json({ user: newUser });
     } catch (error) {
       logger?.error("Signup error: " + (error as Error).message);
-      res.status(500).json({ message: "Server error" });
+      // Handle error by sending a response with status 500
+      return res.status(500).json({ message: "Server error" });
     }
   }
 
   // Login (Email/Password)
-  public static async login(req: Request, res: Response) {
+  public static async login(req: Request, res: Response): Promise<any> {
     try {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
@@ -101,7 +104,7 @@ class AuthController {
   }
 
   // Get current logged-in user
-  public static async me(req: Request, res: Response) {
+  public static async me(req: Request, res: Response): Promise<any> {
     try {
       const token = req.cookies.token;
       if (!token) return res.status(401).json({ message: "Unauthorized" });

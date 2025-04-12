@@ -30,7 +30,6 @@
     "@types/node": "^22.14.1",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
-    "@types/winston": "^2.4.4",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
