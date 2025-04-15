@@ -6,8 +6,9 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import logger from "./logger";
 import authRoutes from "./routes/auth"; // Import the routes
-import pdfConverter from "./routes/tools";
+import pdfConverter from "./routes/tools"; // Import file conversion routes
 import path from "path";
+
 connectDB();
 const app = express();
 

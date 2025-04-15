@@ -1,9 +1,10 @@
+// utils/upload.ts
 import multer, { FileFilterCallback } from "multer";
 import path from "path";
 import fs from "fs";
-import logger from "../logger";
+import logger from "../logger"; // Assuming you have a logger utility to log messages
 
-// Define types for `file` parameter
+// Define types for the file parameter
 interface File {
   originalname: string;
   mimetype: string;
@@ -21,22 +22,28 @@ const storage = multer.diskStorage({
     cb(null, uploadDir); // Use the 'uploads' directory
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Unique filename with timestamp
+    const uniqueFileName = `${Date.now()}-${file.originalname}`; // Unique filename with timestamp
+    logger?.info(
+      `File uploaded successfully: ${file.originalname}, saved as: ${uniqueFileName}`
+    );
+    cb(null, uniqueFileName); // Save the file with a unique name
   },
 });
 
-// File filter to accept DOCX files and other types like PDF or TXT
+// File filter to accept DOCX, PDF, images, and text files
 const fileFilter = (
   req: Express.Request,
   file: File,
   cb: FileFilterCallback
 ) => {
   // Allowed file extensions and MIME types
-  const allowedExtensions = [".docx", ".pdf", ".txt"]; // Add any other allowed extensions here
+  const allowedExtensions = [".docx", ".pdf", ".txt", ".jpg", ".jpeg", ".png"];
   const allowedMimeTypes = [
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX MIME type
-    // "application/pdf", // PDF MIME type
+    "application/pdf", // PDF MIME type
     "text/plain", // Plain text MIME type
+    "image/jpeg", // JPEG MIME type
+    "image/png", // PNG MIME type
   ];
 
   // Check file extension
