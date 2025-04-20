@@ -7,12 +7,16 @@ import sharp from "sharp"; // Image compression library
 import { FileConverter } from "../utils/fileConverter"; // Import the FileConverter class
 import { PDFDocument } from "pdf-lib";
 import logger from "../logger";
+import { checkAnonymousLimit } from "../middleware/checkAnonymousLimit";
+import { checkCredits } from "../middleware/checkCredits";
 
 const router = express.Router();
 
 // Route to handle DOCX to PDF conversion
 router.post(
   "/convert-docx-to-pdf",
+  checkAnonymousLimit,
+  checkCredits,
   upload.single("docx"),
   async (req: Request, res: Response): Promise<any> => {
     if (!req.file) {
@@ -50,6 +54,8 @@ router.post(
 // Image compression route
 router.post(
   "/compress-image",
+  checkAnonymousLimit,
+  checkCredits,
   upload.single("image"),
   async (req: Request, res: Response): Promise<any> => {
     if (!req.file) {
@@ -88,6 +94,8 @@ router.post(
 // PDF compression route
 router.post(
   "/compress-pdf",
+  checkAnonymousLimit,
+  checkCredits,
   upload.single("pdf"),
   async (req: Request, res: Response): Promise<any> => {
     if (!req.file) {
