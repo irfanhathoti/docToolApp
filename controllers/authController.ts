@@ -82,7 +82,9 @@ class AuthController {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
       if (!user || !user.password)
-        return res.status(400).json({ message: "Invalid credentials" });
+        return res
+          .status(400)
+          .json({ message: "User does not exist. Please sign up." });
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch)
@@ -129,4 +131,4 @@ class AuthController {
   }
 }
 
-export default AuthController
+export default AuthController;
